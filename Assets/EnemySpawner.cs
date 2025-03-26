@@ -10,11 +10,13 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
        Transform sp = transform.Find("SpawnPositions");
-        foreach(Transform child in sp)
+
+        spawnPoints = new List<Vector3>();
+        foreach (Transform child in sp)
         {
             spawnPoints.Add(child.position);
         }
-        InvokeRepeating("Spawn", 0, 2);
+        InvokeRepeating("spawn", 0, 2);
     }
     
     void spawn()
