@@ -6,20 +6,17 @@ public class EnemySpawner : MonoBehaviour
 {
     List<Vector3> spawnPoints;
     public GameObject enemy;
-    // Start is called before the first frame update
     void Start()
     {
-       Transform sp = transform.Find("SpawnPositions");
-
+        Transform sp = transform.Find("SpawnPositions");
         spawnPoints = new List<Vector3>();
         foreach (Transform child in sp)
         {
             spawnPoints.Add(child.position);
         }
-        InvokeRepeating("spawn", 0, 2);
+        InvokeRepeating("Spawn", 0, 0.5f);
     }
-    
-    void spawn()
+    void Spawn()
     {
         int index = Random.Range(0, spawnPoints.Count);
         Instantiate(enemy, spawnPoints[index], Quaternion.identity);
