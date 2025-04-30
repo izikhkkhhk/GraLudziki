@@ -14,12 +14,15 @@ public class PlayerController : MonoBehaviour
     public GameObject bulletSpawn;
     public GameObject swordHandle;
     public GameObject bulletPrefab;
+    LevelManager lm;
     void Start()
     {
+        lm = GameObject.Find("LevelManager").GetComponent<LevelManager>();
         rb = GetComponent<Rigidbody>();
         enemies = new List<GameObject>();
         InvokeRepeating("Shoot", 0, 2);
     }
+
     void Update()
     {
         controllerInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
@@ -29,11 +32,24 @@ public class PlayerController : MonoBehaviour
         {
             swordHandle.SetActive(true);
             swordHandle.transform.Rotate(0, 2f, 0);
+
+            EnemyController enemy = enemies[0].GetComponent<EnemyController>();
+            Weapon sword = swordHandle.GetComponent<Weapon>();
+            if (enemy != null && sword != null)
+            {
+                enemy.health -= sword.damage; 
+                if (enemy.health <= 0)
+                {
+                    lm.AddPoints(1);  
+                    Destroy(enemies[0]);
+                }
+            }
         }
         else
         {
             swordHandle.SetActive(false);
         }
+
     }
     void FixedUpdate()
     {
@@ -43,13 +59,28 @@ public class PlayerController : MonoBehaviour
     }
     void Shoot()
     {
-        if(enemies.Count > 0)
+        if (enemies.Count > 0)
         {
             gun.transform.LookAt(enemies[0].transform);
             GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.transform.position, gun.transform.rotation);
+
+            Weapon weapon = bullet.GetComponent<Weapon>();
+            if (weapon != null)
+            {
+                weapon.damage = 10; 
+            }
+
             bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.forward * 1000);
-            Destroy(bullet, 2f);
-            Debug.Log("Pif paf!");
+            Destroy(bullet, 2f); 
+            Debug.Log("hujak");
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            lm.ReducePlayerHealth(5);
         }
     }
 }

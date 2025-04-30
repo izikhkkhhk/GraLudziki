@@ -1,32 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
     GameObject player;
     public float speed = 4f;
+    public int health = 10;
     LevelManager lm;
 
-    // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        GameObject levelManagerObject = GameObject.Find("LevelManager");
-        if (levelManagerObject != null)
-        {
-            lm = levelManagerObject.GetComponent<LevelManager>();
-        }
-        else
-        {
-            Debug.LogError("LevelManager not found in the scene.");
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        lm = GameObject.Find("LevelManager").GetComponent<LevelManager>();
     }
 
     private void FixedUpdate()
@@ -35,16 +19,20 @@ public class EnemyController : MonoBehaviour
         transform.Translate(Vector3.forward * Time.deltaTime * speed);
     }
 
-    public void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider colision)
     {
-        if (other.gameObject.CompareTag("PlayerWeapon"))
+        if (colision.gameObject.CompareTag("PlayerWeapon"))
         {
-            if (lm != null)
+            Weapon weapon = colision.GetComponent<Weapon>();
+            if (weapon != null)
             {
-                lm.AddPoints(1);
+                health -= weapon.damage; 
+                if (health <= 0)
+                {
+                    lm.AddPoints(1); 
+                    Destroy(gameObject);
+                }
             }
-            Destroy(gameObject);
-            //Destroy(other.gameObject);
         }
     }
 }
