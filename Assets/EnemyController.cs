@@ -4,7 +4,7 @@ public class EnemyController : MonoBehaviour
 {
     GameObject player;
     public float speed = 4f;
-    public int health = 10;
+    public int enemyHealth = 10;
     LevelManager lm;
 
     void Start()
@@ -26,8 +26,8 @@ public class EnemyController : MonoBehaviour
             Weapon weapon = colision.GetComponent<Weapon>();
             if (weapon != null)
             {
-                health -= weapon.damage; 
-                if (health <= 0)
+                enemyHealth -= weapon.damage; 
+                if (enemyHealth <= 0)
                 {
                     lm.AddPoints(1); 
                     Destroy(gameObject);

@@ -37,8 +37,8 @@ public class PlayerController : MonoBehaviour
             Weapon sword = swordHandle.GetComponent<Weapon>();
             if (enemy != null && sword != null)
             {
-                enemy.health -= sword.damage; 
-                if (enemy.health <= 0)
+                enemy.enemyHealth -= sword.damage; 
+                if (enemy.enemyHealth <= 0)
                 {
                     lm.AddPoints(1);  
                     Destroy(enemies[0]);
@@ -65,10 +65,10 @@ public class PlayerController : MonoBehaviour
             GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.transform.position, gun.transform.rotation);
 
             Weapon weapon = bullet.GetComponent<Weapon>();
-            if (weapon != null)
-            {
-                weapon.damage = 10; 
-            }
+            //if (weapon != null)
+            //{
+            //    weapon.damage = 10; 
+            //}
 
             bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.forward * 1000);
             Destroy(bullet, 2f); 

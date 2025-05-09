@@ -14,7 +14,7 @@ public class EnemySpawner : MonoBehaviour
         {
             spawnPoints.Add(child.position);
         }
-        InvokeRepeating("Spawn", 0, 0.1f);
+        InvokeRepeating("Spawn", 0, 1f);
     }
     void Spawn()
     {
